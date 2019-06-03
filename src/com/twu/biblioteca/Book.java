@@ -1,14 +1,26 @@
 package com.twu.biblioteca;
 
-import java.util.Date;
 
 public class Book {
+
+    private String name;
     private String author;
     private int yearPublished;
 
-    public Book(String author, int yearPublished){
+    //constructor
+    public Book(String name,String author, int yearPublished){
+        this.name=name;
         this.author=author;
         this.yearPublished=yearPublished;
+    }
+
+    //getters & setters
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAuthor() {
@@ -29,6 +41,6 @@ public class Book {
 
     @Override
     public String toString() {
-        return author +" "+ yearPublished;
+        return name+"\t"+author +"\t"+ yearPublished;
     }
 }
