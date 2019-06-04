@@ -3,24 +3,27 @@ package com.twu.biblioteca;
 
 public class Book {
 
-    private String name;
+    private String tittle;
     private String author;
     private int yearPublished;
+    private boolean checkedOut;
 
     //constructor
-    public Book(String name,String author, int yearPublished){
-        this.name=name;
+    public Book(String tittle,String author, int yearPublished){
+        this.tittle=tittle;
         this.author=author;
         this.yearPublished=yearPublished;
     }
 
     //getters & setters
-    public String getName() {
-        return name;
+
+
+    public String getTittle() {
+        return tittle;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTittle(String tittle) {
+        this.tittle = tittle;
     }
 
     public String getAuthor() {
@@ -39,8 +42,9 @@ public class Book {
         this.yearPublished = yearPublished;
     }
 
+
     @Override
     public String toString() {
-        return name+"\t"+author +"\t"+ yearPublished;
+        return tittle+"\t"+author +"\t"+ yearPublished;
     }
 }

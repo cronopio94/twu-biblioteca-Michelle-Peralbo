@@ -3,6 +3,7 @@ package com.twu.biblioteca;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,17 +11,19 @@ public class Library {
 
     private List<Book> books;
 
-    public List<Book> getBooks() {
-        return books;
-    }
 //constructor
     public Library() {
         books=new ArrayList<Book>();
     }
 
+//get
+    public List<Book> getBooks() {
+        return books;
+    }
+
 //methods
-    public void showMessage(String message) {
-        System.out.println(message+"\n");
+    public void showWelcomeMessage(String message) {
+        System.out.println(message);
     }
 
     public void addBook(Book book){
@@ -29,7 +32,6 @@ public class Library {
 
 
     public void printBooks(){
-        System.out.println("Tittle"+"\t"+"Author"+"\t"+"Year\n");
         for (Book item: books
              ) {
             System.out.println(item);
