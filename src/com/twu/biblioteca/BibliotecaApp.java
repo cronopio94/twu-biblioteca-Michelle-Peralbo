@@ -14,9 +14,11 @@ public class BibliotecaApp {
         biblioteca.addBook(book2);
 
         biblioteca.showWelcomeMessage("Welcome to Library. Your one-stop-shop for great book titles in Bangalore!");
-        biblioteca.showMenu();
+        while (true) {
+            biblioteca.showMenu();
+            biblioteca.selectOption(System.in);
 
-
+        }
 
 
 
