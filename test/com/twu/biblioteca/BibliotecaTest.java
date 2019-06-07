@@ -1,5 +1,4 @@
 package com.twu.biblioteca;
-
 import org.junit.Before;
 import org.junit.Test;
 import java.io.ByteArrayInputStream;
@@ -19,11 +18,9 @@ public class BibliotecaTest {
     public void setUp() {
         //preparation
         library= new Library();
-        book1=new Book("Metamorphosis","Kafka", 111);
+        book1=new Book("Metamorphosis","Kafka", 111, true);
         outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
-
-
     }
 
     @Test
@@ -54,7 +51,7 @@ public class BibliotecaTest {
     @Test
     public void shouldSeeTheMenu(){
         library.showMenu();
-        assertEquals("1. List of Books\n2. Quit\n",outContent.toString());
+        assertEquals("1. List of Books\n2. Checkout Book\n3. Return Book\n4. Quit\n",outContent.toString());
     }
 
     @Test
@@ -84,11 +81,56 @@ public class BibliotecaTest {
         assertEquals("Please select a valid option\n",outContent.toString());
 }
 
-@Test
-    public void shouldQuitBibliotecaWhenSelectedThree(){
-        inContent= new ByteArrayInputStream("2".getBytes());
+//@Test
+   /* public void shouldQuitBibliotecaWhenSelectedThree(){
+        inContent= new ByteArrayInputStream("3".getBytes());
         System.setIn(inContent);
         library.selectOption(inContent);
-}
+}*/
 
-}
+    @Test
+    public void shouldCheckOutABook(){
+        library.addBook(book1);
+
+        library.checkOutBook(book1.getIdBook());
+
+        assertEquals(false, book1.isAvailable());
+
+    }
+    @Test
+    public void shouldSeeAMessageWhenSelectedWrongIdInCheckOut(){
+        library.addBook(book1);
+        int selectedId=9;
+
+        library.checkOutBook(selectedId);
+
+        assertEquals("Sorry that book is not available\n",outContent.toString());
+    }
+    @Test
+    public void ShouldReturnABook(){
+        library.addBook(book1);
+        library.checkOutBook(book1.getIdBook());
+
+        library.returnBookToTheLibrary(book1.getIdBook());
+
+        assertEquals(true, book1.isAvailable());
+
+        }
+        @Test
+    public void shouldSeeAMessageWhenWrongIdEntertoReturn(){
+        library.addBook(book1);
+        int selectedId=9;
+
+        library.returnBookToTheLibrary(selectedId);
+
+        assertEquals("That is a not valid book to return\n", outContent.toString());
+        }
+
+
+
+
+
+    }
+
+
+
