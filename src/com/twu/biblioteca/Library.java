@@ -1,6 +1,5 @@
 package com.twu.biblioteca;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -12,26 +11,26 @@ public class Library {
     private List<Book> books;
 
     //constructor
-    public Library() {
+    Library() {
         books = new ArrayList<Book>();
     }
 
     //get
-    public List<Book> getBooks() {
+    List<Book> getBooks() {
         return books;
     }
 
     //methods
-    public void showWelcomeMessage(String message) {
+    void showWelcomeMessage(String message) {
         System.out.println(message);
     }
 
-    public void addBook(Book book) {
+    void addBook(Book book) {
         books.add(book);
     }
 
 
-    public void printBooks() {
+    void printBooks() {
         for (Book item : books
         ) {
             if (item.isAvailable()) {
@@ -40,12 +39,12 @@ public class Library {
         }
     }
 
-    public void showMenu() {
+    void showMenu() {
         System.out.println("1. List of Books\n2. Checkout Book\n3. Return Book\n4. Quit");
 
     }
 
-    public void selectOption(InputStream inputStream) {
+    void selectOption(InputStream inputStream) {
         try {
             Scanner reader = new Scanner(inputStream);
             int optionSelected = reader.nextInt();
@@ -83,7 +82,7 @@ public class Library {
     }
 
 
-    public void checkOutBook(int idBook) {
+    void checkOutBook(int idBook) {
         for (Book item : books) {
             if (item.getIdBook() == idBook) {
                 item.setAvailable(false);
@@ -98,7 +97,7 @@ public class Library {
     }
 
 
-    public void returnBookToTheLibrary(int idBook) {
+    void returnBookToTheLibrary(int idBook) {
         for (Book item : books) {
             if (!item.isAvailable() && item.getIdBook() == idBook) {
                 item.setAvailable(true);
