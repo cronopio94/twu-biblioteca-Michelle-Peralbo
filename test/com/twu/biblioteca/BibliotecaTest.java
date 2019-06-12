@@ -14,6 +14,8 @@ public class BibliotecaTest {
 
     private Library library;
     private Book book1;
+    private Movie movie1;
+    private User user1;
     private ByteArrayOutputStream outContent;
     private ByteArrayInputStream inContent;
 
@@ -22,6 +24,8 @@ public class BibliotecaTest {
         //preparation
         library = new Library();
         book1 = new Book("Metamorphosis", "Kafka", 111, true);
+        movie1 = new Movie("Avengers EndGame", 2019, "Marvel", 8);
+        User user1 = new User(1, "Michelle Peralbo", "michelle123@mail.com", "0987654321", "asd-asdf", "123456");
         outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
     }
@@ -73,8 +77,8 @@ public class BibliotecaTest {
     }
 
     @Test
-    public void shouldSeeInvalidOptionWhenEnterFive() {
-        inContent = new ByteArrayInputStream("5".getBytes());
+    public void shouldSeeInvalidOptionWhenEnterNine() {
+        inContent = new ByteArrayInputStream("9".getBytes());
         System.setIn(inContent);
 
         library.selectOption(inContent);
@@ -96,9 +100,11 @@ public class BibliotecaTest {
     public void shouldCheckOutABook() {
         library.addBook(book1);
 
-        library.checkOutBook(book1.getIdBook());
+        library.checkOutBook(book1.getIdBook(), user1);
 
-        assertFalse(book1.isAvailable());
+
+        assertEquals(0, library.getBooks().size());
+        assertEquals(book1, library.getBooksCheckedOut().get(0));
 
     }
 
@@ -107,7 +113,7 @@ public class BibliotecaTest {
         library.addBook(book1);
         int selectedId = 9;
 
-        library.checkOutBook(selectedId);
+        library.checkOutBook(selectedId, user1);
 
         assertEquals("Sorry that book is not available\n", outContent.toString());
     }
@@ -115,9 +121,9 @@ public class BibliotecaTest {
     @Test
     public void ShouldReturnABook() {
         library.addBook(book1);
-        library.checkOutBook(book1.getIdBook());
+        library.checkOutBook(book1.getIdBook(), user1);
 
-        library.returnBookToTheLibrary(book1.getIdBook());
+        library.returnBookToTheLibrary(book1.getIdBook(), user1);
 
         assertTrue(book1.isAvailable());
 
@@ -128,9 +134,38 @@ public class BibliotecaTest {
         library.addBook(book1);
         int selectedId = 9;
 
-        library.returnBookToTheLibrary(selectedId);
+        library.returnBookToTheLibrary(selectedId, user1);
 
         assertEquals("That is a not valid book to return\n", outContent.toString());
+    }
+
+    // MOVIES
+    @Test
+    public void shouldAddAMovieInTheLibrary() {
+        library.addMovie(movie1);
+        int index = library.getMovies().size();
+
+        assertEquals(1, index);
+    }
+
+    @Test
+    public void shouldSeeAListofMovies() {
+        library.addMovie(movie1);
+
+        library.printMovies();
+
+        assertEquals(movie1.toString() + "\n", outContent.toString());
+    }
+
+    @Test
+    public void shouldCheckoutAMovie() {
+        library.addMovie(movie1);
+
+        library.checkOutMovie(movie1.getId());
+
+        assertEquals(0, library.getMovies().size());
+        assertEquals(movie1, library.getMoviesCheckedOut().get(0));
+
     }
 
 }
