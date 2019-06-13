@@ -3,6 +3,6 @@ package com.twu.biblioteca;
 public interface menuStrategy {
     String showOptionMessage();
 
-    void executeOption();
+    void executeOption(Library library, int selectedOption);
 
 }

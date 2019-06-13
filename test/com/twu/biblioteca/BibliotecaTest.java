@@ -18,16 +18,19 @@ public class BibliotecaTest {
     private User user1;
     private ByteArrayOutputStream outContent;
     private ByteArrayInputStream inContent;
+    menuStrategy[] algorithms = {new ListBooks(), new CheckoutBook(), new ReturnBook(), new ListMovie(), new CheckoutMovie(), new ShowUserInformation(), new QuitApp()};
+
 
     @Before
     public void setUp() {
         //preparation
-        library = new Library();
+        library = new Library("test");
         book1 = new Book("Metamorphosis", "Kafka", 111, true);
         movie1 = new Movie("Avengers EndGame", 2019, "Marvel", 8);
         User user1 = new User(1, "Michelle Peralbo", "michelle123@mail.com", "0987654321", "asd-asdf", "123456");
         outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
+
     }
 
     @Test
@@ -59,9 +62,10 @@ public class BibliotecaTest {
 
     @Test
     public void shouldSeeTheMenu() {
-        library.showMenu();
-
-        assertEquals("1. List of Books\n2. Checkout Book\n3. Return Book\n4. Quit\n", outContent.toString());
+        for (menuStrategy algorithm : algorithms) {
+            executeMenu(algorithm);
+        }
+        assertEquals("1. List of Books\n2. Checkout book\n3. Return book\n4. List movies\n5. Checkout movie\n6. Show user information\n7. Quit\n", outContent.toString());
     }
 
     @Test
@@ -69,8 +73,9 @@ public class BibliotecaTest {
         library.addBook(book1);
         inContent = new ByteArrayInputStream("1".getBytes());
         System.setIn(inContent);
-
-        library.selectOption(inContent);
+        for (menuStrategy algorithm : algorithms) {
+            executeSelectOption(algorithm, 1, library);
+        }
 
         assertEquals(book1.toString() + "\n", outContent.toString());
 
@@ -81,26 +86,17 @@ public class BibliotecaTest {
         inContent = new ByteArrayInputStream("9".getBytes());
         System.setIn(inContent);
 
-        library.selectOption(inContent);
+        //library.selectOption(inContent);
 
         assertEquals("Please select a valid option\n", outContent.toString());
     }
 
-    @Test
-    public void shouldSeeInvalidOptionWhenEnterLetter() {
-        inContent = new ByteArrayInputStream("d".getBytes());
-        System.setIn(inContent);
-
-        library.selectOption(inContent);
-
-        assertEquals("Please select a valid option\n", outContent.toString());
-    }
 
     @Test
     public void shouldCheckOutABook() {
         library.addBook(book1);
 
-        library.checkOutBook(book1.getIdBook(), user1);
+        library.checkOutBook( user1);
 
 
         assertEquals(0, library.getBooks().size());
@@ -113,7 +109,7 @@ public class BibliotecaTest {
         library.addBook(book1);
         int selectedId = 9;
 
-        library.checkOutBook(selectedId, user1);
+        library.checkOutBook(user1);
 
         assertEquals("Sorry that book is not available\n", outContent.toString());
     }
@@ -121,9 +117,9 @@ public class BibliotecaTest {
     @Test
     public void ShouldReturnABook() {
         library.addBook(book1);
-        library.checkOutBook(book1.getIdBook(), user1);
+        library.checkOutBook( user1);
 
-        library.returnBookToTheLibrary(book1.getIdBook(), user1);
+        library.returnBookToTheLibrary(user1);
 
         assertTrue(book1.isAvailable());
 
@@ -134,7 +130,7 @@ public class BibliotecaTest {
         library.addBook(book1);
         int selectedId = 9;
 
-        library.returnBookToTheLibrary(selectedId, user1);
+        library.returnBookToTheLibrary( user1);
 
         assertEquals("That is a not valid book to return\n", outContent.toString());
     }
@@ -168,6 +164,13 @@ public class BibliotecaTest {
 
     }
 
+    private static void executeMenu(menuStrategy strategy) {
+        System.out.println(strategy.showOptionMessage());
+    }
+
+    private static void executeSelectOption(menuStrategy strategy, int optionSelected, Library library) {
+        strategy.executeOption(library, optionSelected);
+    }
 }
 
 

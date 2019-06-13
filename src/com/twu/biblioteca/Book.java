@@ -31,10 +31,6 @@ public class Book {
         return available;
     }
 
-    void setAvailable(boolean available) {
-        this.available = available;
-    }
-
     @Override
     public String toString() {
         return idBook + "\t" + tittle + "\t" + author + "\t" + yearPublished;

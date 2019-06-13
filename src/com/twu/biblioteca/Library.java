@@ -19,6 +19,19 @@ public class Library {
     //constructor
     Library() {
         books = new ArrayList<Book>();
+        books.add(new Book("Rayuela", "Julio Cortazar", 1963, true));
+        books.add(new Book("La Tregua", "Mario Benedetti", 1959, true));
+        movies = new ArrayList<Movie>();
+        movies.add(new Movie("Avenngers", 2019, "Marvel", 9));
+        movies.add(new Movie("La la land", 2017, "Director", 10));
+        moviesCheckedOut = new ArrayList<Movie>();
+        booksCheckedOut = new ArrayList<Book>();
+        users = new ArrayList<User>();
+        users.add(new User(1, "Michelle Peralbo", "michelle123@mail.com", "0987654321", "asd-asdf", "123456"));
+    }
+
+    Library(String test ){
+        books = new ArrayList<Book>();
         movies = new ArrayList<Movie>();
         moviesCheckedOut = new ArrayList<Movie>();
         booksCheckedOut = new ArrayList<Book>();
@@ -46,6 +59,16 @@ public class Library {
         return users;
     }
 
+
+    public void setLoggedUser(User loggedUser) {
+        this.loggedUser = loggedUser;
+    }
+
+    public User getLoggedUser() {
+        return loggedUser;
+    }
+
+
     //methods
     void showWelcomeMessage(String message) {
         System.out.println(message);
@@ -64,11 +87,6 @@ public class Library {
         }
     }
 
-    void showMenu() {
-        System.out.println("1. List of Books\n2. Checkout Book\n3. Return Book\n4. Quit");
-
-    }
-
     void selectOption(InputStream inputStream) {
         try {
             Scanner reader = new Scanner(inputStream);
@@ -83,7 +101,7 @@ public class Library {
                     String libraryNumber = readerId.next();
                     System.out.println("Please enter your password");
                     String password = readerId.next();
-                    loggedUser = validateUser(libraryNumber, password, System.in, 2);
+                    loggedUser = validateUser(libraryNumber, password);
 
                 } else {
                     if (optionSelected == 3) {
@@ -92,7 +110,7 @@ public class Library {
                         String libraryNumber = readerId.next();
                         System.out.println("Please enter your password");
                         String password = readerId.next();
-                        loggedUser = validateUser(libraryNumber, password, System.in, 3);
+                        loggedUser = validateUser(libraryNumber, password);
 
 
                     } else if (optionSelected == 4) {
@@ -127,9 +145,13 @@ public class Library {
     }
 
 
-    void checkOutBook(int idBook, User user) {
+    void checkOutBook(User user) {
+        System.out.println("Please select the id of the book to checkout");
+        printBooks();
+        Scanner readerId = new Scanner(System.in);
+        int idBook1 = readerId.nextInt();
         for (Book item : books) {
-            if (item.getIdBook() == idBook) {
+            if (item.getIdBook() == idBook1) {
                 booksCheckedOut.add(item);
                 books.remove(item);
                 user.addBorrowedBook(item);
@@ -144,7 +166,10 @@ public class Library {
     }
 
 
-    void returnBookToTheLibrary(int idBook, User user) {
+    void returnBookToTheLibrary(User user) {
+        System.out.println("Please select the id of the book to return");
+        Scanner readerId = new Scanner(System.in);
+        int idBook = readerId.nextInt();
         if (booksCheckedOut.size() == 0) {
             System.out.println("That is a not valid book to return");
         } else {
@@ -193,23 +218,10 @@ public class Library {
         users.add(user);
     }
 
-    public User validateUser(String libraryNumber, String password, InputStream inputStream, int option) {
+    public User validateUser(String libraryNumber, String password) {
 
         for (User item : users) {
             if (item.getLibraryNumber().equals(libraryNumber) || item.getPassword().equals(password)) {
-                if (option == 2) {
-                    System.out.println("Please select the id of the book to checkout");
-                    printBooks();
-                    Scanner readerId = new Scanner(inputStream);
-                    int idBook = readerId.nextInt();
-                    checkOutBook(idBook, item);
-
-                } else if (option == 3) {
-                    System.out.println("Please enter the id of the book to return");
-                    Scanner readerId = new Scanner(inputStream);
-                    int idBook = readerId.nextInt();
-                    returnBookToTheLibrary(idBook, item);
-                }
                 return item;
             } else {
                 System.out.println("Try again!");
@@ -218,4 +230,5 @@ public class Library {
         }
         return null;
     }
+
 }
